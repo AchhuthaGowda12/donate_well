@@ -1,8 +1,10 @@
 :root {
-    --primary-color: #97ceff;
-    --secondary-color: #0f2a2f;
-    --text-color: #e5e5e5;
-    --accent-color: #61a5f9;
+    --primary-color: #ff7f50; /* Coral orange */
+    --primary-light: #ffab91; /* Light orange */
+    --primary-dark: #e64a19; /* Dark orange */
+    --secondary-color: #5b2a07; /* Dark blue-gray */
+    --text-color: #f5f5f5;
+    --accent-color: #ff9800; /* Orange */
     --glass-bg: rgba(255, 255, 255, 0.1);
     --glass-border: rgba(255, 255, 255, 0.2);
     --success-color: #4CAF50;
@@ -19,11 +21,12 @@
 body {
     font-family: 'Inter', Arial, sans-serif;
     line-height: 1.6;
-    background: linear-gradient(135deg, #0a192f 0%, #0f2a2f 100%);
+    background: linear-gradient(135deg, #643722 0%, #6c2f0b 100%);
     color: var(--text-color);
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
-
 
 /* Glass Effect */
 .glass-effect {
@@ -34,6 +37,10 @@ body {
 }
 
 /* Header Styles */
+header {
+    margin-bottom: 2rem;
+}
+
 .header-container {
     display: flex;
     justify-content: space-between;
@@ -60,6 +67,7 @@ nav ul {
     display: flex;
     gap: 2rem;
     list-style: none;
+    align-items: center;
 }
 
 .nav-link {
@@ -73,7 +81,7 @@ nav ul {
 
 .nav-link:hover {
     color: var(--primary-color);
-    background: rgba(100, 255, 218, 0.1);
+    background: rgba(255, 127, 80, 0.1);
 }
 
 /* Welcome Message */
@@ -84,7 +92,8 @@ nav ul {
 
 /* Dashboard Container */
 .dashboard-container {
-    padding: 2rem 4rem;
+    padding: 0 4rem 2rem;
+    flex: 1;
 }
 
 /* Section Headers */
@@ -116,6 +125,12 @@ h2 i {
 .overview-card {
     text-align: center;
     padding: 2rem;
+    /* transition: transform 0.3s ease, box-shadow 0.3s ease; */
+}
+
+.overview-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 .overview-card i {
@@ -130,20 +145,21 @@ h2 i {
     color: var(--primary-color);
 }
 
-/* Investment and Project Cards */
-.investment-grid, .project-grid {
+/* Donation and Campaign Cards */
+.donation-grid, .campaign-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 2rem;
     margin-top: 2rem;
 }
 
-.investment-card, .project-card {
-    transition: transform 0.3s ease;
+.donation-card, .campaign-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.investment-card:hover, .project-card:hover {
+.donation-card:hover, .campaign-card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 .card-header {
@@ -161,28 +177,39 @@ h2 i {
 .description {
     margin-bottom: 1.5rem;
     opacity: 0.9;
+    line-height: 1.6;
 }
 
 /* Status Badge */
-.status-badge {
+.status-badge, .category-badge {
     padding: 0.5rem 1rem;
     border-radius: 20px;
     font-size: 0.9rem;
     font-weight: 500;
 }
 
-.active {
+.approved {
     background: rgba(76, 175, 80, 0.2);
     color: #4CAF50;
 }
 
-.completed {
-    background: rgba(33, 150, 243, 0.2);
-    color: #2196F3;
+.pending_approval {
+    background: rgba(255, 193, 7, 0.2);
+    color: #FFC107;
 }
 
-/* Investment Details */
-.investment-details, .project-details {
+.rejected {
+    background: rgba(244, 67, 54, 0.2);
+    color: #f44336;
+}
+
+.category-badge {
+    background: rgba(255, 127, 80, 0.2);
+    color: var(--primary-color);
+}
+
+/* Donation Details */
+.donation-details, .campaign-details {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 1rem;
@@ -205,15 +232,15 @@ h2 i {
 }
 
 .progress-bar {
-    height: 8px;
+    height: 10px;
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
+    border-radius: 5px;
     overflow: hidden;
 }
 
 .progress {
     height: 100%;
-    background: var(--primary-color);
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
     transition: width 0.3s ease;
 }
 
@@ -225,9 +252,11 @@ h2 i {
     opacity: 0.8;
 }
 
-/* Investment Form */
-.investment-form {
+/* Donation Form */
+.donation-form {
     margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--glass-border);
 }
 
 .form-group {
@@ -247,59 +276,55 @@ h2 i {
     border: 1px solid var(--glass-border);
     border-radius: 5px;
     color: var(--text-color);
+    transition: border-color 0.3s ease;
 }
 
-.calculated-equity {
-    margin-top: 0.5rem;
-    color: var(--success-color);
-    font-weight: 500;
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
 }
 
 /* Buttons */
-.invest-button, .cta-button {
+.donate-button, .cta-button, .view-button {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
     padding: 0.8rem 1.5rem;
     background: var(--primary-color);
-    color: var(--secondary-color);
+    color: white;
     border: none;
     border-radius: 5px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
+    text-decoration: none;
 }
 
-.invest-button:hover, .cta-button:hover {
-    background: var(--accent-color);
+.donate-button:hover, .cta-button:hover, .view-button:hover {
+    background: var(--primary-dark);
     transform: translateY(-2px);
 }
 
-/* Investment History */
-.investment-history {
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--glass-border);
+.donate-button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
 }
 
-.investment-history h4 {
+.view-button {
+    background: transparent;
+    border: 1px solid var(--primary-color);
     color: var(--primary-color);
-    margin-bottom: 1rem;
 }
 
-.investment-history ul {
-    list-style: none;
+.view-button:hover {
+    background: rgba(255, 127, 80, 0.1);
 }
 
-.investment-history li {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 0.5rem;
-}
-
-.investment-history i {
-    color: var(--primary-color);
+.view-campaign {
+    margin-top: 1rem;
+    text-align: center;
 }
 
 /* Empty State */
@@ -319,20 +344,15 @@ h2 i {
     opacity: 0.8;
 }
 
-/* Status Message */
-.status-message {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 1rem;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 5px;
-    margin-top: 1.5rem;
+/* Footer */
+footer {
+    text-align: center;
+    padding: 1.5rem;
+    margin-top: 2rem;
 }
 
-.status-message i {
-    color: var(--primary-color);
+.footer-content {
+    opacity: 0.7;
 }
 
 /* Responsive Design */
@@ -341,7 +361,7 @@ h2 i {
         padding: 1rem 2rem;
     }
 
-    .overview-grid, .investment-grid, .project-grid {
+    .overview-grid, .donation-grid, .campaign-grid {
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     }
 }
@@ -381,7 +401,7 @@ h2 i {
     }
 }
 
-.overview-card, .investment-card, .project-card {
+.overview-card, .donation-card, .campaign-card {
     animation: fadeIn 0.5s ease-out forwards;
 }
 
@@ -400,89 +420,11 @@ h2 i {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--accent-color);
+    background: var(--primary-dark);
 }
 
 /* Selection Color */
 ::selection {
     background: var(--primary-color);
-    color: var(--secondary-color);
-}
-
-
-:root {
-    --primary-color: #97ceff;
-    --secondary-color: #0f2a2f;
-    --text-color: #e5e5e5;
-    --accent-color: #61a5f9;
-    --glass-bg: rgba(255, 255, 255, 0.1);
-    --glass-border: rgba(255, 255, 255, 0.2);
-    --success-color: #4CAF50;
-    --warning-color: #FFC107;
-    --danger-color: #f44336;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Inter', Arial, sans-serif;
-    line-height: 1.6;
-    background: linear-gradient(135deg, #0a192f 0%, #0f2a2f 100%);
-    color: var(--text-color);
-    min-height: 100vh;
-}
-
-/* Glass Effect */
-.glass-effect {
-    background: var(--glass-bg);
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--glass-border);
-    border-radius: 10px;
-}
-
-/* Header Styles */
-.header-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.5rem 4rem;
-}
-
-.logo {
-    font-size: 2.5rem;
-    font-weight: 800;
-}
-
-.logo a {
-    text-decoration: none;
-    color: var(--text-color);
-}
-
-.logo-dot {
-    color: var(--primary-color);
-}
-
-/* Navigation */
-nav ul {
-    display: flex;
-    gap: 2rem;
-    list-style: none;
-}
-
-.nav-link {
-    color: var(--text-color);
-    text-decoration: none;
-    font-weight: 500;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    transition: all 0.3s ease;
-}
-
-.nav-link:hover {
-    color: var(--primary-color);
-    background: rgba(100, 255, 218, 0.1);
+    color: white;
 }

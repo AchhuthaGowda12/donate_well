@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AngelFundr - Payment</title>
-    <link rel="stylesheet" href="../static/css/investor.css">
+    <title>Donations Platform - Make a Donation</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://js.stripe.com/v3/"></script>
 </head>
@@ -12,12 +11,12 @@
     <header class="glass-effect">
         <div class="header-container">
             <div class="logo">
-                <a href="/">AngelFundr<span class="logo-dot">.</span></a>
+                <a href="/">DonateHope<span class="logo-dot">.</span></a>
             </div>
             <nav>
                 <ul>
                     <li class="welcome-msg">Welcome, {{ name }}</li>
-                    <li><a href="/investor-dashboard" class="nav-link">Dashboard</a></li>
+                    <li><a href="/donor-dashboard" class="nav-link">Dashboard</a></li>
                     <li><a href="/logout" class="nav-link">Logout</a></li>
                 </ul>
             </nav>
@@ -27,11 +26,18 @@
    
     <div class="payment-container">
         <div class="payment-details">
-            <h2>Investment Details</h2>
-            <h3>{{ project.title }}</h3>
+            <h2>Donation Details</h2>
+            <h3>{{ campaign.title }}</h3>
+            <p class="campaign-desc">{{ campaign.description }}</p>
             <div class="details">
-                <p><strong>Investment Amount:</strong> ${{ "%.2f"|format(amount) }}</p>
-                <p><strong>Equity Percentage:</strong> {{ "%.2f"|format(equity_percentage) }}%</p>
+                <p><strong>Donation Amount:</strong> ${{ "%.2f"|format(amount) }}</p>
+                <p><strong>Campaign Goal:</strong> ${{ "%.2f"|format(campaign.funding_goal) }}</p>
+                <p><strong>Current Progress:</strong> ${{ "%.2f"|format(campaign.current_funding) }} 
+                   ({{ "%.0f"|format((campaign.current_funding / campaign.funding_goal) * 100) }}%)</p>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress" style="width: {{ ((campaign.current_funding / campaign.funding_goal) * 100)|round|int }}%"></div>
             </div>
             
             <form id="payment-form">
@@ -39,51 +45,191 @@
                     <!-- Stripe Element will be inserted here -->
                 </div>
                 <button id="submit">
-                    <span id="button-text">Pay now</span>
+                    <span id="button-text">Donate Now</span>
                     <div id="spinner" class="spinner hidden"></div>
                 </button>
                 <div id="payment-message" class="hidden"></div>
             </form>
+            
+            <div class="security-info">
+                <i class="fas fa-lock"></i>
+                <span>Your payment information is secure with 256-bit SSL encryption</span>
+            </div>
         </div>
     </div>
 
-    
-
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 DonateHope. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact Us</a>
+            </div>
+        </div>
+    </footer>
 
     <style>
-        .payment-container {
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 0 1rem;
+        :root {
+            --primary-color: #ff7b25;
+            --primary-dark: #e66b1c;
+            --primary-light: #ffa76a;
+            --secondary-color: #fafafa;
+            --text-color: #333;
+            --light-text: #555;
+            --accent-color: #ff9e00;
+            --bg-color: #f8f9fa;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-shadow: rgba(0, 0, 0, 0.1);
         }
-
-        .payment-card {
-            padding: 2rem;
-            margin-bottom: 2rem;
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
-        .project-summary {
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        
+        body {
+            background: linear-gradient(to bottom right, #f8f9fa, #e9ecef);
+            min-height: 100vh;
+            color: var(--text-color);
+            line-height: 1.6;
         }
-
-        .glass-input {
-            background: rgba(255, 255, 255, 0.1);
+        
+        /* Header Styles */
+        header.glass-effect {
+            background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(10px);
-            border-radius: 10px;
-            padding: 1rem;
-            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
-
-        .submit-button {
+        
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo a {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+        
+        .logo-dot {
+            color: var(--accent-color);
+            font-size: 2rem;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            align-items: center;
+        }
+        
+        .welcome-msg {
+            color: var(--light-text);
+            font-weight: 500;
+        }
+        
+        .nav-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+        
+        /* Payment Container */
+        .payment-container {
+            max-width: 700px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+        
+        .payment-details {
+            padding: 1rem;
+        }
+        
+        .payment-details h2 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+        
+        .payment-details h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
+            color: var(--text-color);
+        }
+        
+        .campaign-desc {
+            color: var(--light-text);
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+        
+        .details {
+            background: #f9f9f9;
+            padding: 1.2rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .details p {
+            margin-bottom: 0.5rem;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            margin: 1.5rem 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: var(--primary-color);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+        
+        /* Form Styles */
+        #payment-form {
+            margin-top: 2rem;
+        }
+        
+        #payment-element {
+            margin-bottom: 1.5rem;
+        }
+        
+        #submit {
             width: 100%;
             padding: 1rem;
-            background: rgba(79, 70, 229, 0.9);
+            background: var(--primary-color);
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             font-size: 1.1rem;
+            font-weight: 600;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -91,20 +237,26 @@
             gap: 0.5rem;
             transition: all 0.3s ease;
         }
-
-        .submit-button:hover {
-            background: rgba(79, 70, 229, 1);
+        
+        #submit:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
         }
-
+        
+        #submit:active {
+            transform: translateY(0);
+        }
+        
         .security-info {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            margin-top: 1rem;
-            color: rgba(255, 255, 255, 0.7);
+            margin-top: 1.5rem;
+            color: #777;
             font-size: 0.9rem;
+            justify-content: center;
         }
-
+        
         .spinner {
             display: inline-block;
             width: 1rem;
@@ -114,74 +266,97 @@
             border-top-color: white;
             animation: spin 1s linear infinite;
         }
-
+        
         @keyframes spin {
             to {
                 transform: rotate(360deg);
             }
         }
-
+        
         .hidden {
             display: none;
         }
-
-        .error-message {
-            color: #ff4444;
-            margin-top: 0.5rem;
+        
+        #payment-message {
+            padding: 1rem;
+            margin-top: 1rem;
+            color: #721c24;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 8px;
+        }
+        
+        /* Footer */
+        footer {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1.5rem 0;
+            margin-top: 3rem;
+            border-top: 1px solid #eee;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .footer-links a {
+            color: var(--light-text);
+            text-decoration: none;
             font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            nav ul {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .payment-container {
+                margin: 1rem;
+                padding: 1.5rem 1rem;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+            
+            .footer-links {
+                justify-content: center;
+            }
         }
     </style>
 
     <script>
-
-        // // payment.html - Fixed JavaScript Code
-        // const stripe = Stripe('pk_test_51QgOg4Kjkoqs3fx5TJqHrwb4aBPjHeNxykKD6bASzTDF13vPIZ89sdumhJvQWtvaavfHaboa65M32Yo9dMohejCa00SGCRcvgx');
-        // let elements;
-
-        // initialize();
-
-        // async function initialize() {
-        //     try {
-        //         const response = await fetch(`/create-payment-intent/${projectId}`, {
-        //             method: "POST",
-        //         });
-                
-        //         if (!response.ok) {
-        //             throw new Error('Failed to create payment intent');
-        //         }
-                
-        //         const { clientSecret } = await response.json();
-                
-        //         const appearance = {
-        //             theme: 'stripe',
-        //             variables: {
-        //                 colorPrimary: '#0570de',
-        //             }
-        //         };
-                
-        //         elements = stripe.elements({ 
-        //             appearance, 
-        //             clientSecret 
-        //         });
-
-        //         const paymentElement = elements.create("payment");
-        //         paymentElement.mount("#payment-element");
-                
-        //         // Set up form submission
-        //         const form = document.getElementById('payment-form');
-        //         form.addEventListener('submit', handleSubmit);
-                
-        //     } catch (e) {
-        //         console.error("Error:", e);
-        //         showMessage("Failed to initialize payment. Please try again.");
-        //     }
-        // }
-
-    
-    // Add this at the top to get the project ID from Flask
-        const projectId = "{{ project._id }}";  // This will inject the project ID from Flask
-
-        // Rest of your JavaScript code remains the same
+        // Get the campaign ID from Flask
+        const campaignId = "{{ campaign._id }}";
+        console.log(campaignId);
+        
+        // Initialize Stripe
         const stripe = Stripe('pk_test_51QgOg4Kjkoqs3fx5TJqHrwb4aBPjHeNxykKD6bASzTDF13vPIZ89sdumhJvQWtvaavfHaboa65M32Yo9dMohejCa00SGCRcvgx');
         let elements;
         
@@ -189,10 +364,10 @@
 
         async function initialize() {
             try {
-                const response = await fetch(`/create-payment-intent/${projectId}`, {
+                const response = await fetch(`/create-payment-intent/${campaignId}`, {
                     method: "POST",
                     headers: {
-                        'Content-Type': 'application/json'  // Add this header
+                        'Content-Type': 'application/json'
                     }
                 });
                 
@@ -206,7 +381,12 @@
                 const appearance = {
                     theme: 'stripe',
                     variables: {
-                        colorPrimary: '#0570de',
+                        colorPrimary: '#ff7b25',
+                        colorBackground: '#ffffff',
+                        colorText: '#333333',
+                        colorDanger: '#ff4444',
+                        fontFamily: 'Segoe UI, system-ui, sans-serif',
+                        borderRadius: '8px',
                     }
                 };
                 
@@ -228,8 +408,6 @@
             }
         }
 
-    
-
         async function handleSubmit(e) {
             e.preventDefault();
             setLoading(true);
@@ -238,7 +416,7 @@
                 const { error } = await stripe.confirmPayment({
                     elements,
                     confirmParams: {
-                        return_url: `${window.location.origin}/confirm-investment/${projectId}`,
+                        return_url: `${window.location.origin}/confirm-donation/${campaignId}`,
                     },
                 });
 
@@ -247,7 +425,7 @@
                 }
                 
             } catch (e) {
-                showMessage("An unexpected error occurred.");
+                showMessage("An unexpected error occurred during payment processing.");
             }
             
             setLoading(false);
@@ -257,6 +435,9 @@
             const messageDiv = document.getElementById("payment-message");
             messageDiv.textContent = messageText;
             messageDiv.classList.remove("hidden");
+            
+            // Scroll to the message
+            messageDiv.scrollIntoView({ behavior: "smooth" });
         }
 
         function setLoading(isLoading) {

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AngelFundr</title>
+    <title>DonateWell</title>
     <link rel="stylesheet" href="../static/css/styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
@@ -13,7 +13,7 @@
     <header class="glass-effect">
         <div class="header-container">
             <div class="logo">
-                <a href="/">AngelFundr<span class="logo-dot">.</span></a>
+                <a href="/">DonateWell<span class="logo-dot">.</span></a>
             </div>
             <nav>
                 <ul>
@@ -24,6 +24,7 @@
                     {% endif %}
                     <li><a href="/" class="nav-link active">Home</a></li>
                     <li><a href="#about" class="nav-link">About Us</a></li>
+                    <li><a href="#causes" class="nav-link">Causes</a></li>
                     <li><a href="#contact-us" class="nav-link">Contact Us</a></li>
                     {% if session['name'] %}
                         <li><a href="/logout" class="nav-link">Logout</a></li>
@@ -34,25 +35,25 @@
         
         <div class="hero-section">
             <div class="hero-text">
-                <h1 class="main-headline">Built to scale all private funds</h1>
-                <p class="hero-subtitle">AngelFundr provides investors and innovators with the tools to grow.</p>
-                <p class="hero-description">Your platform to connect with investors who help grow businesses.</p>
+                <h1 class="main-headline">Make a difference today</h1>
+                <p class="hero-subtitle">Support causes that change lives around the world</p>
+                <p class="hero-description">Connect with trusted NGOs and organizations that need your help to create positive change.</p>
                 <div class="cta-container">
-                    <a href="#ex" class="cta-button">Explore more <i class="fas fa-arrow-right"></i></a>
+                    <a href="#ex" class="cta-button">Explore Causes <i class="fas fa-heart"></i></a>
                 </div>
             </div>
             <div class="hero-stats glass-effect">
                 <div class="stat-item">
-                    <span class="stat-number">25+</span>
-                    <span class="stat-label">Startups Funded</span>
+                    <span class="stat-number">100+</span>
+                    <span class="stat-label">Active Causes</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number">$10M+</span>
-                    <span class="stat-label">Total Investment</span>
+                    <span class="stat-number">$5M+</span>
+                    <span class="stat-label">Donations Raised</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number">1k+</span>
-                    <span class="stat-label">Active Investors</span>
+                    <span class="stat-number">10k+</span>
+                    <span class="stat-label">Lives Impacted</span>
                 </div>
             </div>
         </div>
@@ -65,39 +66,115 @@
                     <i class="fas fa-search"></i>
                 </div>
                 <img src="../static/images/explore.jpg" alt="Explore">
-                <h3>Explore</h3>
-                <p>Discover exciting startup opportunities</p>
-                <a href="#" class="feature-link">Learn More <i class="fas fa-chevron-right"></i></a>
+                <h3>Discover</h3>
+                <p>Find causes that align with your values</p>
+                <a href="#" class="feature-link">Browse Causes <i class="fas fa-chevron-right"></i></a>
             </div>
             
-            <div class="feature-card glass-effect" onclick="checkLoginBeforeFundRaise();">
+            <div class="feature-card glass-effect" onclick="checkLoginBeforeNGORegistration();">
                 <div class="feature-icon">
-                    <i class="fas fa-handshake"></i>
+                    <i class="fas fa-hands-helping"></i>
                 </div>
-                <img src="../static/images/collaborate.jpg" alt="FundRaise">
-                <h3>Collaborate</h3>
-                <p>Partner with founders and co-investors</p>
-                <a href="#" class="feature-link">Start Now <i class="fas fa-chevron-right"></i></a>
+                <img src="../static/images/collaborate.jpg" alt="Register Organization">
+                <h3>Register Your NGO</h3>
+                <p>Create campaigns and receive support</p>
+                <a href="#" class="feature-link">Get Started <i class="fas fa-chevron-right"></i></a>
             </div>
             
-            <div class="feature-card glass-effect" onclick="checkLoginBeforeInvest();">
+            <div class="feature-card glass-effect" onclick="checkLoginBeforeDonate();">
                 <div class="feature-icon">
-                    <i class="fas fa-chart-line"></i>
+                    <i class="fas fa-hand-holding-heart"></i>
                 </div>
-                <img src="../static/images/invest.jpg" alt="Invest">
-                <h3>Invest</h3>
-                <p>Seamlessly fund ventures you believe in</p>
-                <a href="#" class="feature-link">Invest Now <i class="fas fa-chevron-right"></i></a>
+                <img src="../static/images/invest.jpg" alt="Donate">
+                <h3>Donate</h3>
+                <p>Support causes that matter to you</p>
+                <a href="#" class="feature-link">Give Now <i class="fas fa-chevron-right"></i></a>
             </div>
             
             <div class="feature-card glass-effect">
                 <div class="feature-icon">
-                    <i class="fas fa-rocket"></i>
+                    <i class="fas fa-users"></i>
                 </div>
-                <img src="../static/images/groww.jpg" alt="Grow">
-                <h3>Grow</h3>
-                <p>Expand your portfolio and knowledge</p>
-                <a href="#" class="feature-link">Get Started <i class="fas fa-chevron-right"></i></a>
+                <img src="../static/images/groww.jpg" alt="Impact">
+                <h3>See Your Impact</h3>
+                <p>Track how your donations create change</p>
+                <a href="#" class="feature-link">View Impact <i class="fas fa-chevron-right"></i></a>
+            </div>
+        </section>
+        
+        <section id="about" class="about-section glass-effect">
+            <h2>About GivingHope</h2>
+            <p>GivingHope connects donors with verified NGOs and charitable organizations around the world. Our platform ensures that your generosity reaches those who need it most, with full transparency and accountability.</p>
+            <p>We believe in the power of collective action to address global challenges like poverty, education inequality, healthcare access, and environmental protection.</p>
+        </section>
+        
+        <section id="causes" class="causes-preview">
+            <h2>Featured Causes</h2>
+            <div class="causes-grid">
+                <div class="cause-card glass-effect">
+                    <div class="cause-progress">
+                        <div class="progress-bar" style="width: 75%"></div>
+                    </div>
+                    <h3>Clean Water Initiative</h3>
+                    <p>Providing clean drinking water to rural communities</p>
+                    <div class="cause-stats">
+                        <span>$15,000 of $20,000</span>
+                        <span>75% Funded</span>
+                    </div>
+                    <a href="#" class="donate-button">Donate Now</a>
+                </div>
+                
+                <div class="cause-card glass-effect">
+                    <div class="cause-progress">
+                        <div class="progress-bar" style="width: 45%"></div>
+                    </div>
+                    <h3>Education for All</h3>
+                    <p>Supporting underprivileged children's education</p>
+                    <div class="cause-stats">
+                        <span>$9,000 of $20,000</span>
+                        <span>45% Funded</span>
+                    </div>
+                    <a href="#" class="donate-button">Donate Now</a>
+                </div>
+                
+                <div class="cause-card glass-effect">
+                    <div class="cause-progress">
+                        <div class="progress-bar" style="width: 60%"></div>
+                    </div>
+                    <h3>Disaster Relief</h3>
+                    <p>Emergency support for natural disaster victims</p>
+                    <div class="cause-stats">
+                        <span>$30,000 of $50,000</span>
+                        <span>60% Funded</span>
+                    </div>
+                    <a href="#" class="donate-button">Donate Now</a>
+                </div>
+            </div>
+            <div class="view-all-container">
+                <a href="/" class="view-all-button">View All Causes <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </section>
+        
+        <section class="testimonials glass-effect">
+            <h2>What Our Donors Say</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-quote"><i class="fas fa-quote-left"></i></div>
+                    <p>"GivingHope made it easy for me to find and support causes I'm passionate about. I love being able to see the impact of my donations."</p>
+                    <div class="testimonial-author">
+                        <span class="author-name">Sarah J.</span>
+                        <span class="author-title">Regular Donor</span>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="testimonial-quote"><i class="fas fa-quote-left"></i></div>
+                    <p>"As an NGO, we've been able to reach more supporters and increase our impact through this platform. The tools provided are invaluable."</p>
+                    <div class="testimonial-author">
+                        <span class="author-name">Michael R.</span>
+                        <span class="author-title">NGO Director</span>
+                    </div>
+                </div>
             </div>
         </section>
     </section>
@@ -107,6 +184,7 @@
             <div class="footer-section">
                 <h4>Quick Links</h4>
                 <ul>
+                    <li><a href="#">How It Works</a></li>
                     <li><a href="#">Privacy Policy</a></li>
                     <li><a href="#">Terms of Service</a></li>
                     <li><a href="#">FAQ</a></li>
@@ -118,6 +196,7 @@
                 <div class="social-media">
                     <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
                     <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
                     <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
                 </div>
             </div>
@@ -125,14 +204,15 @@
             <div id="contact-us" class="footer-section">
                 <h4>Contact Info</h4>
                 <div class="contact-info">
-                    <p><i class="fas fa-envelope"></i> contact@angelfundr.in</p>
-                    <p><i class="fas fa-phone"></i>9110852333</p>
+                    <p><i class="fas fa-envelope"></i> contact@givinghope.org</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Hope Street, Charity City</p>
                 </div>
             </div>
         </div>
         
         <div class="footer-bottom">
-            <p>&copy; 2024 AngelFundr. All Rights Reserved.</p>
+            <p>&copy; 2025 GivingHope. All Rights Reserved.</p>
         </div>
     </footer>
     
@@ -142,13 +222,13 @@
         particlesJS('particles-js', {
             particles: {
                 number: { value: 80 },
-                color: { value: '#64ffda' },
+                color: { value: '#FF7043' },
                 shape: { type: 'circle' },
                 opacity: { value: 0.5 },
                 size: { value: 3 },
                 line_linked: {
                     enable: true,
-                    color: '#64ffda',
+                    color: '#FF7043',
                     opacity: 0.2
                 },
                 move: {
@@ -158,20 +238,21 @@
             }
         });
 
-        function checkLoginBeforeFundRaise() {
+        function checkLoginBeforeNGORegistration() {
             {% if session['user_id'] %}
-                window.location.href = "{{ url_for('startup_dashboard') }}";
+                window.location.href = "{{ url_for('ngo_dashboard') }}";
             {% else %}
-                window.location.href = "/login?next={{ url_for('create_project') }}";
+                window.location.href = "/login?next={{ url_for('create_campaign') }}";
             {% endif %}
+           
         }
-
-        function checkLoginBeforeInvest() {
+        function checkLoginBeforeDonate() {
             {% if session['user_id'] %}
-                window.location.href = "{{ url_for('investor_dashboard') }}";
+                window.location.href = "{{ url_for('donor_dashboard') }}";
             {% else %}
-                window.location.href = "/login?next={{ url_for('investor_dashboard') }}";
+                window.location.href = "/login?next={{ url_for('donor_dashboard') }}";
             {% endif %}
+            
         }
     </script>
 </body>

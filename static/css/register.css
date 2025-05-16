@@ -1,131 +1,246 @@
 /* General Styles */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', 'Arial', sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #fff9f0, #fff5e6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: 480px;
+}
+
+/* Card */
+.card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 30px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(245, 158, 11, 0.1);
+  border-top: 4px solid #f97316;
+}
+
+.logo {
+  font-size: 48px;
+  color: #f97316;
+  margin-bottom: 15px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 25px;
+}
+
+/* Alert Styles */
+.alert {
+  padding: 12px 15px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.alert-success {
+  background-color: #ecfdf5;
+  color: #047857;
+  border-left: 4px solid #10b981;
+}
+
+.alert-error {
+  background-color: #fef2f2;
+  color: #b91c1c;
+  border-left: 4px solid #ef4444;
+}
+
+.alert-warning {
+  background-color: #fffbeb;
+  color: #b45309;
+  border-left: 4px solid #f59e0b;
+}
+
+.alert-info {
+  background-color: #eff6ff;
+  color: #1e40af;
+  border-left: 4px solid #3b82f6;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: inherit;
+}
+
+/* Form Styles */
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  background: #f8fafc;
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.input-group:focus-within {
+  border-color: #f97316;
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
+}
+
+.input-row {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 5px;
+}
+
+.input-row .input-group {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Icons in input groups */
+.input-group i {
+  color: #94a3b8;
+  margin-right: 10px;
+  font-size: 16px;
+  width: 16px;
+  text-align: center;
+}
+
+/* Input fields */
+.input-group input,
+.input-group select {
+  font-size: 15px;
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #334155;
+}
+
+.input-group input::placeholder,
+.input-group select::placeholder {
+  color: #94a3b8;
+}
+
+.input-group select {
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2394a3b8' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: calc(100% - 8px) center;
+  padding-right: 28px;
+}
+
+/* Toggle Password Button */
+.toggle-password {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #94a3b8;
+  font-size: 16px;
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: color 0.2s;
+}
+
+.toggle-password:hover {
+  color: #f97316;
+}
+
+/* Button */
+.submit-btn {
+  background: #f97316;
+  color: #fff;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  margin-top: 10px;
+}
+
+.submit-btn:hover {
+  background: #ea580c;
+  transform: translateY(-2px);
+}
+
+.submit-btn:active {
+  transform: translateY(0);
+}
+
+/* Footer Text */
+.footer-text {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #64748b;
+}
+
+.footer-text a {
+  color: #f97316;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.footer-text a:hover {
+  color: #ea580c;
+  text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .input-row {
+    flex-direction: column;
+    gap: 15px;
   }
   
-  body {
-    background: linear-gradient(135deg, #dfe9f3, #ffffff);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
-  
-  /* Container */
-  .container {
-    width: 100%;
-    max-width: 400px;
-  }
-  
-  /* Card */
   .card {
-    background: #fff;
-    border-radius: 8px;
     padding: 20px;
-    text-align: center;
+    border-radius: 12px;
   }
   
   .title {
     font-size: 24px;
-    font-weight: bold;
-    color: #333;
   }
   
-  .subtitle {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 20px;
+  .logo {
+    font-size: 36px;
   }
-  
-  /* Form Styles */
-  .form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .input-group {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-    background: #f7f8fa;
-    padding: 10px 15px;
-    border-radius: 5px;
-    border: none; /* Remove borders */
-  }
-  
-  .input-row {
-    display: flex;
-    gap: 10px; /* Add spacing between the input groups */
-    flex-wrap: wrap; /* Ensure inputs wrap to the next line on smaller screens */
-  }
-  
-  .input-row .input-group {
-    flex: 1;
-    min-width: 48%; /* Ensure inputs share space evenly and wrap when needed */
-  }
-  
-  /* Input fields */
-  .input-group input,
-  .input-group select {
-    font-size: 14px;
-    width: 100%; /* Ensure inputs take the full width of their container */
-    border: none; /* Remove borders */
-    outline: none; /* Remove focus outline */
-    background: transparent; /* Optional: Transparent background */
-  }
-  
-  /* Optional: Focus styles for better UX */
-  .input-group input:focus,
-  .input-group select:focus {
-    outline: none;
-    background-color: #e8f0fe; /* Optional: Slight background color on focus */
-  }
-  
-  /* Button */
-  .submit-btn {
-    background: #0f2a2f;
-    color: #fff;
-    padding: 10px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  
-  .submit-btn:hover {
-    background: #0f2a2f;
-  }
-  
-  /* Footer Text */
-  .footer-text {
-    margin-top: 10px;
-    font-size: 12px;
-    color: #666;
-  }
-  
-  .footer-text a {
-    color: #0f2a2f;
-    text-decoration: none;
-  }
-  
-  .footer-text a:hover {
-    text-decoration: underline;
-  }
-<<<<<<< HEAD
-  
-
-  /* added now */
-  /* Error message styling */
-#error-message {
-  color: #e74c3c; /* Error color */
-  font-size: 14px;
-  font-weight: bold;
-  margin-bottom: 15px;
-  display: none; /* Initially hidden */
 }
-=======
-  
->>>>>>> 82195f08312954b38cfee1f1c756d06dd37e39c8

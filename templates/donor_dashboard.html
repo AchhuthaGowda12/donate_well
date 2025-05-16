@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -24,7 +24,7 @@
     </header>
 
     <main class="dashboard-container">
-        <!-- Investment Overview -->
+       
         <section class="overview-section glass-effect">
             {% set total_invested = namespace(value=0) %}
             {% set active_projects = namespace(value=0) %}
@@ -58,7 +58,6 @@
         </section>
 
 
-        <!-- Your Investments Section -->
         <section class="investments-section">
             <h2><i class="fas fa-wallet"></i> Your Investments</h2>
             <div class="investment-grid">
@@ -98,9 +97,7 @@
             </div>
         </section>
     
-    <!-- Keep the existing header and overview sections unchanged -->
-
-    <!-- Update the Explore Projects section with these changes -->
+    
     <section id="explore" class="explore-section">
         <h2><i class="fas fa-compass"></i> Explore Projects</h2>
         <div class="project-grid">
@@ -192,70 +189,7 @@
         </div>
     </section>
 
-    <!-- Update the JavaScript section
-    <script>
-        function calculateEquity(projectId, fundingGoal, totalEquity, remainingEquity) {
-            const inputElement = document.getElementById(`investment-${projectId}`);
-            const equityDisplay = document.getElementById(`equity-${projectId}`);
-            const errorDisplay = document.getElementById(`error-${projectId}`);
-            const submitButton = document.getElementById(`submit-${projectId}`);
-            
-            const amount = parseFloat(inputElement.value) || 0;
-            const calculatedEquity = ((amount / fundingGoal) * totalEquity).toFixed(2);
-            
-            // Clear previous messages
-            errorDisplay.style.display = 'none';
-            submitButton.disabled = false;
-            
-            if (amount <= 0) {
-                equityDisplay.textContent = '';
-                return;
-            }
-            
-            // Display calculated equity
-            equityDisplay.textContent = `Calculated Equity: ${calculatedEquity}%`;
-            
-            // Validate against remaining equity
-            if (parseFloat(calculatedEquity) > remainingEquity) {
-                errorDisplay.textContent = `Maximum available equity is ${remainingEquity}%`;
-                errorDisplay.style.display = 'block';
-                submitButton.disabled = true;
-            }
-        }
-
-        // Add form submission handling
-        document.querySelectorAll('.investment-form').forEach(form => {
-            form.addEventListener('submit', async (event) => {
-                event.preventDefault();
-                const submitButton = form.querySelector('button[type="submit"]');
-                submitButton.disabled = true;
-                
-                try {
-                    const response = await fetch(form.action, {
-                        method: 'POST',
-                        body: new FormData(form)
-                    });
-                    
-                    if (response.redirected) {
-                        window.location.href = response.url;
-                    } else {
-                        const data = await response.json();
-                        if (data.error) {
-                            throw new Error(data.error);
-                        }
-                    }
-                } catch (error) {
-                    const projectId = form.id.split('-')[2];
-                    const errorDisplay = document.getElementById(`error-${projectId}`);
-                    errorDisplay.textContent = error.message;
-                    errorDisplay.style.display = 'block';
-                    submitButton.disabled = false;
-                }
-            });
-        });
-    </script> -->
-
-    <!-- // Update the JavaScript section in investor_dashboard.html -->
+    
     <script>
         function calculateEquity(projectId, fundingGoal, totalEquity, remainingEquity) {
             const inputElement = document.getElementById(`investment-${projectId}`);
@@ -320,9 +254,210 @@
             });
         });
     </script>
+</body>
+</html> -->
 
 
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GiveHope - Donor Dashboard</title>
+    <link rel="stylesheet" href="../static/css/donor.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <header class="glass-effect">
+        <div class="header-container">
+            <div class="logo">
+                <a href="/">DonateWell<span class="logo-dot">.</span></a>
+            </div>
+            <nav>
+                <ul>
+                    <li class="welcome-msg">Welcome, {{ name }}</li>
+                    <li><a href="/" class="nav-link">Home</a></li>
+                    <li><a href="/logout" class="nav-link">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
+    <main class="dashboard-container">
+        <!-- Donation Overview -->
+        <section class="overview-section glass-effect">
+            <div class="overview-grid">
+                <div class="overview-card">
+                    <i class="fas fa-heart"></i>
+                    <h3>Total Donated</h3>
+                    <p class="overview-value">${{ "%.2f"|format(total_donated|default(0)) }}</p>
+                </div>
+                <div class="overview-card">
+                    <i class="fas fa-hand-holding-heart"></i>
+                    <h3>Campaigns Supported</h3>
+                    <p class="overview-value">{{ user_donations|length }}</p>
+                </div>
+                <div class="overview-card">
+                    <i class="fas fa-globe"></i>
+                    <h3>Impact</h3>
+                    <p class="overview-value">Changing lives</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Your Donations Section -->
+        <section class="donations-section">
+            <h2><i class="fas fa-history"></i> Your Donation History</h2>
+            <div class="donation-grid">
+                {% if user_donations %}
+                    {% for donation in user_donations %}
+                    <div class="donation-card glass-effect">
+                        <div class="card-header">
+                            <h3>{{ donation.campaign_title }}</h3>
+                            <span class="status-badge {{ donation.status }}">{{ donation.status.title() }}</span>
+                        </div>
+                        <div class="card-content">
+                            <p class="description">{{ donation.campaign_description }}</p>
+                            <div class="donation-details">
+                                <div class="detail-item">
+                                    <i class="fas fa-dollar-sign"></i>
+                                    <span>Donated: ${{ "%.2f"|format(donation.amount) }}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-calendar"></i>
+                                    <span>Date: {{ donation.donation_date.strftime('%b %d, %Y') if donation.donation_date else 'N/A' }}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-receipt"></i>
+                                    <span>Transaction ID: {{ donation.transaction_id[:8] + '...' if donation.transaction_id else 'N/A' }}</span>
+                                </div>
+                            </div>
+                            <div class="view-campaign">
+                                <a href="#campaign-{{ donation.campaign_id }}" class="view-button">
+                                    <i class="fas fa-eye"></i> View Campaign
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state glass-effect">
+                        <i class="fas fa-donate"></i>
+                        <p>You haven't made any donations yet.</p>
+                        <a href="#explore" class="cta-button">Explore Campaigns</a>
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+    
+        <!-- Explore Campaigns section -->
+        <section id="explore" class="explore-section">
+            <h2><i class="fas fa-compass"></i> Explore Campaigns</h2>
+            <div class="campaign-grid">
+                {% for campaign in campaigns %}
+                <div id="campaign-{{ campaign._id }}" class="campaign-card glass-effect">
+                    <div class="card-header">
+                        <h3>{{ campaign.title }}</h3>
+                        <span class="category-badge">{{ campaign.category }}</span>
+                    </div>
+                    <div class="card-content">
+                        <p class="description">{{ campaign.description }}</p>
+                        <div class="funding-progress">
+                            <div class="progress-bar">
+                                <div class="progress" style="width: {{ campaign.funding_progress|round(2) }}%"></div>
+                            </div>
+                            <div class="progress-stats">
+                                <span>${{ "%.2f"|format(campaign.current_funding|default(0)) }} raised</span>
+                                <span>Goal: ${{ "%.2f"|format(campaign.funding_goal) }}</span>
+                            </div>
+                        </div>
+                        <div class="campaign-details">
+                            <div class="detail-item">
+                                <i class="fas fa-chart-pie"></i>
+                                <span>Progress: {{ campaign.funding_progress|round(1) }}%</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-money-bill-wave"></i>
+                                <span>Still Needed: ${{ "%.2f"|format(campaign.remaining_funding|default(0)) }}</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-calendar"></i>
+                                <span>{{ campaign.days_remaining }} days left</span>
+                            </div>
+                        </div>
+
+                        <form class="donation-form" action="/donate/{{ campaign._id }}" method="POST" id="donate-form-{{ campaign._id }}">
+                            <div class="form-group">
+                                <label for="donation-{{ campaign._id }}">Donation Amount ($)</label>
+                                <input 
+                                    type="number" 
+                                    id="donation-{{ campaign._id }}"
+                                    name="donation" 
+                                    required 
+                                    min="1" 
+                                    step="0.01"
+                                    placeholder="Enter amount">
+                                <p class="error-message" id="error-{{ campaign._id }}" style="color: red; display: none;"></p>
+                            </div>
+                            <button type="submit" class="donate-button" id="submit-{{ campaign._id }}">
+                                <i class="fas fa-heart"></i> Donate Now
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                {% else %}
+                <div class="empty-state glass-effect">
+                    <i class="fas fa-folder-open"></i>
+                    <p>No campaigns available at the moment.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+
+    <footer class="glass-effect">
+        <div class="footer-content">
+            <p>&copy; 2025 GiveHope - Connecting Donors with Causes That Matter</p>
+        </div>
+    </footer>
+
+    <script>
+        // Handle donation form submission
+        document.querySelectorAll('.donation-form').forEach(form => {
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const submitButton = form.querySelector('button[type="submit"]');
+                const campaignId = form.id.split('-')[2];
+                const errorDisplay = document.getElementById(`error-${campaignId}`);
+                
+                submitButton.disabled = true;
+                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                errorDisplay.style.display = 'none';
+                
+                try {
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        body: new FormData(form)
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+                    
+                    if (data.redirect) {
+                        window.location.href = data.redirect;
+                    }
+                } catch (error) {
+                    errorDisplay.textContent = error.message;
+                    errorDisplay.style.display = 'block';
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = '<i class="fas fa-heart"></i> Donate Now';
+                }
+            });
+        });
+    </script>
 </body>
 </html>

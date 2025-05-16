@@ -3,37 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Admin Dashboard | Donations Platform</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f9f9f9;
+            background-color: #f8f8f8;
+            color: #333;
         }
-        /* header {
-            background-color: #333;
-            color: white;
-            padding: 10px 20px;
-            text-align: center;
-        } */
 
-
-
-
-         /* Header Styling */
+        /* Header Styling */
         header {
-            background-color: #0f2a2f;
+            background-color: #FF7F00;
             color: white;
             padding: 15px 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         header h1 {
             margin: 0;
             font-size: 26px;
+            font-weight: 600;
         }
 
         header nav ul {
@@ -51,124 +45,475 @@
             color: white;
             text-decoration: none;
             font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
         }
 
         header nav ul li a:hover {
-            text-decoration: underline;
+            background-color: rgba(255, 255, 255, 0.2);
         }
-
-
-
 
         .container {
-            margin: 20px auto;
             max-width: 1200px;
-            padding: 20px;
+            margin: 25px auto;
+            padding: 0 20px;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-title {
+            color: #FF7F00;
+            font-size: 28px;
+            margin: 0;
+        }
+
+        .dashboard-stats {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            flex: 1;
             background: white;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: transform 0.2s ease;
         }
-        h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
+
+        .stat-card:hover {
+            transform: translateY(-5px);
         }
+
+        .stat-card h3 {
+            color: #FF7F00;
+            font-size: 18px;
+            margin-top: 0;
+        }
+
+        .stat-card p {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 0;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            background-color: #FF7F00;
+            color: white;
+            padding: 15px 20px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
         }
+
         table th, table td {
-            padding: 10px;
-            border: 1px solid #ddd;
+            padding: 12px 15px;
             text-align: left;
+            border-bottom: 1px solid #eee;
         }
+
         table th {
-            background-color: #f4f4f4;
+            background-color: #f8f8f8;
+            color: #555;
+            font-weight: 600;
         }
+
+        table tr:last-child td {
+            border-bottom: none;
+        }
+
+        table tr:hover td {
+            background-color: #f9f9f9;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-pending {
+            background-color: #FFF0E0;
+            color: #FF7F00;
+        }
+
+        .status-approved {
+            background-color: #E6F7E6;
+            color: #28a745;
+        }
+
+        .status-rejected {
+            background-color: #FFEBEE;
+            color: #dc3545;
+        }
+
         .btn {
-            padding: 8px 12px;
-            margin-right: 5px;
+            padding: 8px 16px;
+            margin-right: 6px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
         }
+
         .btn-approve {
-            background-color: #4CAF50;
+            background-color: #28a745;
             color: white;
         }
+
+        .btn-approve:hover {
+            background-color: #218838;
+        }
+
         .btn-reject {
-            background-color: #f44336;
+            background-color: #dc3545;
             color: white;
+        }
+
+        .btn-reject:hover {
+            background-color: #c82333;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: #FF7F00;
+            border-radius: 4px;
+        }
+
+        .action-buttons {
+            display: flex;
+        }
+
+        .truncate {
+            max-width: 300px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+
+        .flash-message {
+            padding: 12px 20px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .flash-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .flash-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .flash-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .dashboard-stats {
+                flex-direction: column;
+            }
+            
+            table, .card {
+                font-size: 14px;
+            }
+            
+            .truncate {
+                max-width: 150px;
+            }
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Admin Dashboard</h1>
+        <h1>Donations Platform</h1>
         <nav>
             <ul>
                 <li><a href="/">Home</a></li>
+                <li><a href="/admin">Dashboard</a></li>
                 <li><a href="/logout">Logout</a></li>
             </ul>
         </nav>
     </header>
-    <div class="container">
-        <h2>Users</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Role</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in users %}
-                <tr>
-                    <td>{{ user.name }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>{{ user.phone }}</td>
-                    <td>{{ user.role }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
 
-        <h2>Projects</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Funding Goal</th>
-                    <th>Current Funding</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for project in projects %}
-                <tr>
-                    <td>{{ project.title }}</td>
-                    <td>{{ project.description }}</td>
-                    <td>{{ project.funding_goal }}</td>
-                    <td>{{ project.current_funding }}</td>
-                    <td>{{ project.status or "Pending" }}</td>
-                    <td>
-                        <form method="POST" style="display: inline;">
-                            <input type="hidden" name="project_id" value="{{ project._id }}">
-                            <button type="submit" name="action" value="approve" class="btn btn-approve">Approve</button>
-                        </form>
-                        <form method="POST" style="display: inline;">
-                            <input type="hidden" name="project_id" value="{{ project._id }}">
-                            <button type="submit" name="action" value="reject" class="btn btn-reject">Reject</button>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="container">
+        <div class="dashboard-header">
+            <h2 class="dashboard-title">Admin Dashboard</h2>
+        </div>
+
+        <!-- Flash Messages -->
+        <div class="flash-messages">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash-message flash-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <h3>Total NGOs</h3>
+                <p>{{ users|selectattr('role', 'equalto', 'ngo')|list|length }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Total Donors</h3>
+                <p>{{ users|selectattr('role', 'equalto', 'donor')|list|length }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Pending Campaigns</h3>
+                <p>{{ campaigns|selectattr('status', 'equalto', 'pending_approval')|list|length }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Active Campaigns</h3>
+                <p>{{ campaigns|selectattr('status', 'equalto', 'approved')|list|length }}</p>
+            </div>
+        </div>
+
+        <!-- Campaigns Section -->
+        <div class="card">
+            <div class="card-header">
+                Campaigns Requiring Approval
+            </div>
+            <div class="card-body">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>NGO Name</th>
+                            <th>Campaign Title</th>
+                            <th>Description</th>
+                            <th>Funding Goal</th>
+                            <th>Current Funding</th>
+                            <th>Deadline</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for campaign in campaigns|selectattr('status', 'equalto', 'pending_approval')|list %}
+                        <tr>
+                            {% for user in users %}
+                                {% if user._id|string == campaign.ngo_id|string %}
+                                    <td>{{ user.name }}</td>
+                                {% endif %}
+                            {% endfor %}
+                            <td>{{ campaign.title }}</td>
+                            <td class="truncate">{{ campaign.description }}</td>
+                            <td>${{ "%0.2f"|format(campaign.funding_goal) }}</td>
+                            <td>${{ "%0.2f"|format(campaign.current_funding) }}</td>
+                            <td>{{ campaign.deadline }}</td>
+                            <td>
+                                <span class="status-badge status-pending">Pending</span>
+                            </td>
+                            <td class="action-buttons">
+                                <form method="POST" style="display: inline;">
+                                    <input type="hidden" name="campaign_id" value="{{ campaign._id }}">
+                                    <button type="submit" name="action" value="approve" class="btn btn-approve">Approve</button>
+                                </form>
+                                <form method="POST" style="display: inline;">
+                                    <input type="hidden" name="campaign_id" value="{{ campaign._id }}">
+                                    <button type="submit" name="action" value="reject" class="btn btn-reject">Reject</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="8" style="text-align: center;">No pending campaigns</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Approved Campaigns -->
+        <div class="card">
+            <div class="card-header">
+                Approved Campaigns
+            </div>
+            <div class="card-body">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>NGO Name</th>
+                            <th>Campaign Title</th>
+                            <th>Funding Goal</th>
+                            <th>Current Funding</th>
+                            <th>Progress</th>
+                            <th>Deadline</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for campaign in campaigns|selectattr('status', 'equalto', 'approved')|list %}
+                        <tr>
+                            {% for user in users %}
+                                {% if user._id|string == campaign.ngo_id|string %}
+                                    <td>{{ user.name }}</td>
+                                {% endif %}
+                            {% endfor %}
+                            <td>{{ campaign.title }}</td>
+                            <td>${{ "%0.2f"|format(campaign.funding_goal) }}</td>
+                            <td>${{ "%0.2f"|format(campaign.current_funding) }}</td>
+                            <td>
+                                {% set progress = (campaign.current_funding / campaign.funding_goal * 100)|round|int %}
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: {{ progress }}%"></div>
+                                </div>
+                                <span style="font-size: 12px;">{{ progress }}%</span>
+                            </td>
+                            <td>{{ campaign.deadline }}</td>
+                            <td>
+                                <span class="status-badge status-approved">Approved</span>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="7" style="text-align: center;">No approved campaigns</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Rejected Campaigns -->
+        <div class="card">
+            <div class="card-header">
+                Rejected Campaigns
+            </div>
+            <div class="card-body">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>NGO Name</th>
+                            <th>Campaign Title</th>
+                            <th>Funding Goal</th>
+                            <th>Description</th>
+                            <th>Deadline</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for campaign in campaigns|selectattr('status', 'equalto', 'rejected')|list %}
+                        <tr>
+                            {% for user in users %}
+                                {% if user._id|string == campaign.ngo_id|string %}
+                                    <td>{{ user.name }}</td>
+                                {% endif %}
+                            {% endfor %}
+                            <td>{{ campaign.title }}</td>
+                            <td>${{ "%0.2f"|format(campaign.funding_goal) }}</td>
+                            <td class="truncate">{{ campaign.description }}</td>
+                            <td>{{ campaign.deadline }}</td>
+                            <td>
+                                <span class="status-badge status-rejected">Rejected</span>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6" style="text-align: center;">No rejected campaigns</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Registered Users -->
+        <div class="card">
+            <div class="card-header">
+                All Users
+            </div>
+            <div class="card-body">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Role</th>
+                            <th>Verification Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user.name }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.phone }}</td>
+                            <td>
+                                {% if user.role == 'ngo' %}
+                                    <span class="status-badge" style="background-color: #E6F0FF; color: #0072CE;">NGO</span>
+                                {% elif user.role == 'donor' %}
+                                    <span class="status-badge" style="background-color: #FFEEDB; color: #FF7F00;">Donor</span>
+                                {% elif user.role == 'admin' %}
+                                    <span class="status-badge" style="background-color: #E6E6E6; color: #333;">Admin</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if user.verified %}
+                                    <span class="status-badge status-approved">Verified</span>
+                                {% else %}
+                                    <span class="status-badge status-rejected">Not Verified</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </body>
 </html>
