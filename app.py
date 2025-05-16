@@ -17,14 +17,15 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-stripe.api_key = "sk_test_51QgOg4Kjkoqs3fx5f4CvkSHpYZazFpaNxOhWSj9oOU4yJ5lxMcAXdZQ0klppdvjzWSGDt4pL1fbBni3S4vFuGCrf00gcrqu6qU"
+stripe.api_key = os.environ.get("stripe_key")
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'mysecretkey')
 
 # MongoDB Configuration
-app.config["MONGO_URI"] = "mongodb+srv://bindushree1978:WjfXdthyVGJCQMLV@cluster0.t5cjyyg.mongodb.net/Donations_app?retryWrites=true&w=majority&appName=Cluster0"
+app.config["MONGO_URI"] = os.getenv("MONGO_URI")
 mongo = PyMongo(app)
+
 
 # Email configuration
 smtp_server = os.environ.get('SMTP_SERVER', 'smtp.gmail.com')
