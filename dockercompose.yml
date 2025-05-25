@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: donations-app
+    ports:
+      - "8000:8000"
+    environment:
+      - FLASK_ENV=production
+      - PYTHONPATH=/app
+      - MONGO_URI=mongodb://mongo:27017/donations
+    volumes:
+      - ./static:/app/static
+      - ./templates:/app/templates
+    depends_on:
+      - mongo
+    restart: unless-stopped
+    
+  mongo:
+    image: mongo:7.0
+    container_name: donations-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+
+volumes:
+  mongo_data:
