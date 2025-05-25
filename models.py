@@ -46,8 +46,24 @@ class Campaign:
     def __init__(self, db):
         self.collection = db["campaigns"]
 
-    def create_campaign(self, title, description, funding_goal, deadline, ngo_id, category="General"):
-        """Create a new campaign by an NGO"""
+    # def create_campaign(self, title, description, funding_goal, deadline, ngo_id, category="General"):
+    #     """Create a new campaign by an NGO"""
+    #     campaign_data = {
+    #         "title": title,
+    #         "description": description,
+    #         "funding_goal": float(funding_goal),
+    #         "current_funding": 0,
+    #         "deadline": deadline,
+    #         "ngo_id": ObjectId(ngo_id),
+    #         "category": category,
+    #         "status": "pending_approval",  # Initial status requires admin approval
+    #         "donations": [],               # List to track donations
+    #         "created_at": datetime.utcnow()
+    #     }
+    #     return self.collection.insert_one(campaign_data).inserted_id
+
+    def create_campaign(self, title, description, funding_goal, deadline, ngo_id, category="General", image=None, image_name=None):
+    # """Create a new campaign by an NGO"""
         campaign_data = {
             "title": title,
             "description": description,
@@ -56,11 +72,14 @@ class Campaign:
             "deadline": deadline,
             "ngo_id": ObjectId(ngo_id),
             "category": category,
-            "status": "pending_approval",  # Initial status requires admin approval
-            "donations": [],               # List to track donations
-            "created_at": datetime.utcnow()
+            "status": "pending_approval",
+            "donations": [],
+            "created_at": datetime.utcnow(),
+            "image": image,                # Binary image data
+            "image_name": image_name      # Original filename
         }
         return self.collection.insert_one(campaign_data).inserted_id
+
 
     def find_all_approved_campaigns(self):
         """Find all campaigns with approved status"""

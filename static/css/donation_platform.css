@@ -383,3 +383,11 @@ nav ul {
         grid-template-columns: 1fr;
     }
 }
+
+
+.campaign-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}

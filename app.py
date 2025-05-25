@@ -14,6 +14,12 @@ from email.mime.multipart import MIMEMultipart
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
 
+
+
+import base64
+
+
+
 # Load environment variables
 load_dotenv()
 
@@ -391,6 +397,11 @@ def ngo_dashboard():
                         donation['donor_name'] = donor_map.get(donor_id, 'Anonymous Donor')
                         # Format amount to 2 decimal places
                         donation['amount'] = float(donation['amount'])
+
+                
+                #image part added
+                if 'image' in campaign and isinstance(campaign['image'], bytes):
+                    campaign['image'] = f"data:image/png;base64,{base64.b64encode(campaign['image']).decode('utf-8')}"
             
             return render_template("ngo_dashboard.html", name=session["name"], campaigns=campaigns)
             
@@ -401,7 +412,38 @@ def ngo_dashboard():
     return redirect("/login")
 
 
-# Route to create a campaign (NGO)
+# # Route to create a campaign (NGO)
+# @app.route("/create-campaign", methods=["GET", "POST"])
+# def create_campaign():
+#     if request.method == "POST":
+#         title = request.form.get("title")
+#         description = request.form.get("description")
+#         funding_goal = float(request.form.get("funding_goal"))
+#         deadline = request.form.get("deadline")
+#         category = request.form.get("category", "General")  # New field for campaign category
+#         user_id = session["user_id"]
+
+#         # Insert campaign into database
+#         campaign = {
+#             "title": title,
+#             "description": description,
+#             "funding_goal": funding_goal,
+#             "current_funding": 0,
+#             "deadline": deadline,
+#             "ngo_id": ObjectId(user_id),
+#             "category": category,             # Category of campaign
+#             "status": "pending_approval",     # Initial status requires admin approval
+#             "donations": [],                  # List to track donations
+#             "created_at": datetime.utcnow()
+#         }
+#         mongo.db.campaigns.insert_one(campaign)
+#         flash("Campaign created successfully! It will be live after admin approval.", "success")
+#         return redirect("/ngo-dashboard")
+#     return render_template("create_campaign.html")
+
+from bson import Binary
+from werkzeug.utils import secure_filename
+
 @app.route("/create-campaign", methods=["GET", "POST"])
 def create_campaign():
     if request.method == "POST":
@@ -409,10 +451,18 @@ def create_campaign():
         description = request.form.get("description")
         funding_goal = float(request.form.get("funding_goal"))
         deadline = request.form.get("deadline")
-        category = request.form.get("category", "General")  # New field for campaign category
+        category = request.form.get("category", "General")
         user_id = session["user_id"]
+        image = request.files["image"]
 
-        # Insert campaign into database
+        if image:
+            image_data = Binary(image.read())
+            image_filename = secure_filename(image.filename)
+        else:
+            image_data = None
+            image_filename = None
+
+        # Campaign document with image
         campaign = {
             "title": title,
             "description": description,
@@ -420,15 +470,21 @@ def create_campaign():
             "current_funding": 0,
             "deadline": deadline,
             "ngo_id": ObjectId(user_id),
-            "category": category,             # Category of campaign
-            "status": "pending_approval",     # Initial status requires admin approval
-            "donations": [],                  # List to track donations
-            "created_at": datetime.utcnow()
+            "category": category,
+            "status": "pending_approval",
+            "donations": [],
+            "created_at": datetime.utcnow(),
+            "image": image_data,
+            "image_name": image_filename
         }
+
         mongo.db.campaigns.insert_one(campaign)
+
         flash("Campaign created successfully! It will be live after admin approval.", "success")
         return redirect("/ngo-dashboard")
+
     return render_template("create_campaign.html")
+
 
 
 @app.route("/donor-dashboard")
@@ -493,6 +549,17 @@ def donor_dashboard():
                 # Remove campaigns that are fully funded
                 if campaign["remaining_funding"] <= 0:
                     campaigns.remove(campaign)
+
+                
+
+
+                #image part added
+                if 'image' in campaign and isinstance(campaign['image'], bytes):
+                    campaign['image'] = f"data:image/png;base64,{base64.b64encode(campaign['image']).decode('utf-8')}"
+
+
+
+
                     
             except Exception as e:
                 app.logger.error(f"Error processing campaign {campaign.get('_id')}: {str(e)}")
