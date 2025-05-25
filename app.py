@@ -411,36 +411,6 @@ def ngo_dashboard():
             
     return redirect("/login")
 
-
-# # Route to create a campaign (NGO)
-# @app.route("/create-campaign", methods=["GET", "POST"])
-# def create_campaign():
-#     if request.method == "POST":
-#         title = request.form.get("title")
-#         description = request.form.get("description")
-#         funding_goal = float(request.form.get("funding_goal"))
-#         deadline = request.form.get("deadline")
-#         category = request.form.get("category", "General")  # New field for campaign category
-#         user_id = session["user_id"]
-
-#         # Insert campaign into database
-#         campaign = {
-#             "title": title,
-#             "description": description,
-#             "funding_goal": funding_goal,
-#             "current_funding": 0,
-#             "deadline": deadline,
-#             "ngo_id": ObjectId(user_id),
-#             "category": category,             # Category of campaign
-#             "status": "pending_approval",     # Initial status requires admin approval
-#             "donations": [],                  # List to track donations
-#             "created_at": datetime.utcnow()
-#         }
-#         mongo.db.campaigns.insert_one(campaign)
-#         flash("Campaign created successfully! It will be live after admin approval.", "success")
-#         return redirect("/ngo-dashboard")
-#     return render_template("create_campaign.html")
-
 from bson import Binary
 from werkzeug.utils import secure_filename
 
@@ -780,3 +750,33 @@ def confirm_donation(campaign_id):
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+
+# # Route to create a campaign (NGO)
+# @app.route("/create-campaign", methods=["GET", "POST"])
+# def create_campaign():
+#     if request.method == "POST":
+#         title = request.form.get("title")
+#         description = request.form.get("description")
+#         funding_goal = float(request.form.get("funding_goal"))
+#         deadline = request.form.get("deadline")
+#         category = request.form.get("category", "General")  # New field for campaign category
+#         user_id = session["user_id"]
+
+#         # Insert campaign into database
+#         campaign = {
+#             "title": title,
+#             "description": description,
+#             "funding_goal": funding_goal,
+#             "current_funding": 0,
+#             "deadline": deadline,
+#             "ngo_id": ObjectId(user_id),
+#             "category": category,             # Category of campaign
+#             "status": "pending_approval",     # Initial status requires admin approval
+#             "donations": [],                  # List to track donations
+#             "created_at": datetime.utcnow()
+#         }
+#         mongo.db.campaigns.insert_one(campaign)
+#         flash("Campaign created successfully! It will be live after admin approval.", "success")
+#         return redirect("/ngo-dashboard")
+#     return render_template("create_campaign.html")
