@@ -10,6 +10,8 @@ services:
       - FLASK_ENV=production
       - PYTHONPATH=/app
       - MONGO_URI=mongodb://mongo:27017/donations
+    env_file:
+      - .env
     volumes:
       - ./static:/app/static
       - ./templates:/app/templates
